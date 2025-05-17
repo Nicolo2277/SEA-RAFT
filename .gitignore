@@ -18,3 +18,5 @@ weights
 *.egg-info
 *.npy
 *.npz
+masks_input/
+masks_output/
