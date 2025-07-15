@@ -20,3 +20,11 @@ weights
 *.npz
 masks_input/
 masks_output/
+true_and_pred/
+multiclass-segmentation-pred/
+custom/
+plot_gt_pred/
+refinement_results/
+wandb/
+metrics.csv
+true_and_pred.zip

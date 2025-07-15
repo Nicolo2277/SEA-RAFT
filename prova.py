@@ -13,6 +13,9 @@ from raft import RAFT
 from utils.utils import load_ckpt
 
 def forward_flow(args, model, image1, image2):
+    #print(image1.shape) torch.Size([1, 3, 540, 960])
+    #print(image2.shape) torch.Size([1, 3, 540, 960])
+    
     output = model(image1, image2, iters=args.iters, test_mode=True)
     flow_final = output['flow'][-1]
     info_final = output['info'][-1]
@@ -93,6 +96,10 @@ def mask_refiner(args, model, device=torch.device('cuda')):
         
         previous_mask_tensor = previous_mask_tensor[None].to(device)
         current_mask_tensor = current_mask_tensor[None].to(device)
+
+        #print(previous_mask_tensor.shape) #torch.Size([1, 3, 1080, 1920])
+        #print(current_mask_tensor.shape) #torch.Size([1, 3, 1080, 1920])
+        
         
         flow = demo_data(args, model, previous_mask_tensor, current_mask_tensor)
         
@@ -137,11 +144,11 @@ def mask_refiner(args, model, device=torch.device('cuda')):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--cfg', required=True, type=str, help='experiment configure file name')
+    parser.add_argument('--cfg', default='config/eval/spring-M.json', type=str, help='experiment configure file name')
     parser.add_argument('--path', default=None, type=str, help='checkpoint path')
-    parser.add_argument('--url', default=None, type=str, help='checkpoint URL')
+    parser.add_argument('--url', default='MemorySlices/Tartan-C-T-TSKH-spring540x960-M', type=str, help='checkpoint URL')
     parser.add_argument('--input_folder', required=True, type=str, help='segmentation masks folder')
-    parser.add_argument('--output_folder', required=True, type=str, help='model output folder')
+    parser.add_argument('--output_folder', default='pprovv', type=str, help='model output folder')
     parser.add_argument('--alpha', type=float, default=0.5, help='alpha parameter for  weighted average')
     parser.add_argument('--device', type=str, default='cpu', help='device to run inference')
     parser.add_argument('--comb_method', type=str, default='weighted_average', help='mode (weighted average or majority voting) for mask combining')
